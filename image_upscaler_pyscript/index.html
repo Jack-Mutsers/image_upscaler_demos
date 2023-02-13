@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            body{
+                padding: 10px;
+            }
+
+            #pyscript-loading-label.label{
+                margin-top: -3rem;
+            }
+        </style>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Hello, World!</title>
+
+        <link rel="stylesheet" href="pyscript/pyscript.css" />
+        <script defer src="pyscript/pyscript.js"></script>
+        <script defer src="pyscript_operation_details_updater.js"></script>
+
+        <py-config>
+            [splashscreen]
+            autoclose = false
+          
+            [[runtimes]]
+            src = "pyodide/pyodide.js"
+            name = "pyodide-0.22.1"
+            lang = "python"
+
+            [[fetch]]
+            from = '/python/'
+            files = ['test_script.py', 'image_upload_opencv.py']
+            to_folder = 'my_scripts'
+
+            [[fetch]]
+            from = '/models/'
+            files = ['4xSmoothRealism.pth', 'RealESRGAN_x4plus.pth']
+            to_folder = 'models'
+
+            [[fetch]]
+            from = '/inputs'
+            files = ["2019-06-22_141715.jpg", "Chibi Cyrus - kopie.png", "Foto_2021-09-21_103026.jpg"]
+            to_folder = 'inputs'
+        </py-config>
+</head>
+
+<body>
+    <py-script>
+        from js import document, console, window, set_message
+        import micropip
+
+        async def load_packages():
+            set_message("Loading packages")
+            
+            await micropip.install(["matplotlib","numpy","opencv_python"])
+            
+            set_message("Packages loaded")
+            document.getElementsByTagName("py-splashscreen")[0].remove()
+
+            file_upload();
+
+        def main():
+            from my_scripts import test_script
+            img = test_script.test()
+            pyscript.write('output_upload', img)
+        
+        def file_upload():
+            from my_scripts import image_upload_opencv
+
+        load_packages()
+
+                
+    </py-script>
+
+    <label for="Upload a PNG image"></label><input type="file" id="file-upload-pillow">
+    <div id="output_upload"></div>
+</body>
+</html>
