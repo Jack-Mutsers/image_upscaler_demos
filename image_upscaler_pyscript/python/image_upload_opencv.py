@@ -1,17 +1,33 @@
 from js import document, console, Uint8Array, window, File
 from pyodide import create_proxy
 from PIL import Image
-import io
-
+import base64
+import numpy as np
 import cv2
+import io
 
 async def _upload_change_and_show(e):
     #Get the first file from upload
     file_list = e.target.files
-    first_item = file_list.item(0)
+
+    for file in file_list:
+        console.log(file)
+        await show_image(file)
+
+async def show_image(file):
+    file_type = file.type
+
+    if "jpg" in file_type or "jpeg" in file_type:
+        file_type = "jpg"
+
+    elif "png" in file_type:
+        file_type = "png"
+
+    # force png export
+    file_type = "png"
 
     #Get the data from the files arrayBuffer as an array of unsigned bytes
-    array_buf = Uint8Array.new(await first_item.arrayBuffer())
+    array_buf = Uint8Array.new(await file.arrayBuffer())
 
     #BytesIO wants a bytes-like object, so convert to bytearray first
     bytes_list = bytearray(array_buf)
@@ -20,16 +36,19 @@ async def _upload_change_and_show(e):
     #Create PIL image from np array
     my_image = Image.open(my_bytes)
 
-    #Convert Pillow object array back into File type that createObjectURL will take
-    my_stream = io.BytesIO()
-    my_image.save(my_stream, format="PNG")
+    open_cv_image = np.array(my_image) 
+    colored_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGBA)
 
-    #Create a JS File object with our data and the proper mime type
-    image_file = File.new([Uint8Array.new(my_stream.getvalue())], "new_image_file.png", {type: "image/png"})
+    _, im_arr = cv2.imencode('.' + file_type, colored_image)  # im_arr: image in Numpy one-dim array format.
+    im_bytes = im_arr.tobytes()
+    im_b64 = base64.b64encode(im_bytes)
+    string = im_b64.decode('utf-8')
+
+    img = "data:image/" + file_type + ";charset=utf-8;base64," + string
 
     #Create new tag and insert into page
     new_image = document.createElement('img')
-    new_image.src = window.URL.createObjectURL(image_file)
+    new_image.src = img
     document.getElementById("output_upload").appendChild(new_image)
 
 
