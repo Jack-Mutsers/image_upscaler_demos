@@ -17,14 +17,14 @@ async def _upload_change_and_show(e):
 async def show_image(file):
     file_type = file.type
 
-    if "jpg" in file_type or "jpeg" in file_type:
-        file_type = "jpg"
+    if "image" not in file_type:
+        console.log("invalid filetype: ", file_type)
+        return
+    
+    mime_type = file_type.replace("image/", "")
 
-    elif "png" in file_type:
-        file_type = "png"
-
-    # force png export
-    file_type = "png"
+    if mime_type == "jpg":
+        mime_type = "jpeg"
 
     #Get the data from the files arrayBuffer as an array of unsigned bytes
     array_buf = Uint8Array.new(await file.arrayBuffer())
@@ -39,17 +39,24 @@ async def show_image(file):
     open_cv_image = np.array(my_image) 
     colored_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGBA)
 
-    _, im_arr = cv2.imencode('.' + file_type, colored_image)  # im_arr: image in Numpy one-dim array format.
-    im_bytes = im_arr.tobytes()
-    im_b64 = base64.b64encode(im_bytes)
-    string = im_b64.decode('utf-8')
+    img_encode = cv2.imencode('.' + file_type, colored_image)[1]
+    data_encode = np.array(img_encode)
+    byte_encode = data_encode.tobytes()
 
-    img = "data:image/" + file_type + ";charset=utf-8;base64," + string
+    base64_encode = base64.b64encode(byte_encode)
+    utf8_string = base64_encode.decode('utf-8')
+
+    img_string = "data:image/" + file_type + ";charset=utf-8;base64," + utf8_string
 
     #Create new tag and insert into page
+    new_image_anchor = document.createElement('a')
+    new_image_anchor.href = img_string
+    new_image_anchor.setAttribute("download", file.name)
+
     new_image = document.createElement('img')
-    new_image.src = img
-    document.getElementById("output_upload").appendChild(new_image)
+    new_image.src = img_string
+    new_image_anchor.appendChild(new_image)
+    document.getElementById("output_upload").appendChild(new_image_anchor)
 
 
 # Run image processing code above whenever file is uploaded    
