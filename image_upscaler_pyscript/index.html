@@ -19,6 +19,12 @@
         <script defer src="pyscript/pyscript.js"></script>
         <script defer src="pyscript_operation_details_updater.js"></script>
 
+        <script>
+            // let zipResponse = await fetch("packages/myfiles.zip");
+            // let zipBinary = await zipResponse.arrayBuffer();
+            // pyodide.unpackArchive(zipBinary, "zip");
+        </script>
+
         <py-config>
             [splashscreen]
             autoclose = false
@@ -30,7 +36,7 @@
 
             [[fetch]]
             from = '/python/'
-            files = ['test_script.py', 'image_upload_opencv.py']
+            files = ['test_script.py', 'image_upload_opencv.py', 'upscaler.py']
             to_folder = 'my_scripts'
 
             [[fetch]]

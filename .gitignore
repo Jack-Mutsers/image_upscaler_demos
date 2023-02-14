@@ -5,3 +5,15 @@ image_upscaler/inputs/
 
 *.rar
 *.zip
+
+python_wheel_creator/Lib/
+
+python_wheel_creator/tmp/
+
+python_wheel_creator/share/
+
+python_wheel_creator/Scripts/
+
+python_wheel_creator/pyvenv.cfg
+
+python_webserver/

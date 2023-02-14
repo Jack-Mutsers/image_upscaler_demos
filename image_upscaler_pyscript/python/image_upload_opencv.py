@@ -1,5 +1,6 @@
 from js import document, console, Uint8Array, window, File
 from pyodide import create_proxy
+from my_scripts import upscaler
 from PIL import Image
 import base64
 import numpy as np
@@ -37,7 +38,9 @@ async def show_image(file):
     my_image = Image.open(my_bytes)
 
     open_cv_image = np.array(my_image) 
-    colored_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGBA)
+
+    # colored_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGBA)
+    colored_image = await upscaler.scale_image(open_cv_image)
 
     img_encode = cv2.imencode('.' + file_type, colored_image)[1]
     data_encode = np.array(img_encode)
