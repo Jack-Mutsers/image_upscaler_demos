@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upload Example | Upscaler.JS</title>
+    <link rel="stylesheet" href="assets/css/layout.css">
+    
+    <script src="assets/js/tf.min.js"></script>
+    <script src="assets/js/upscaler_index.js"></script>
+    <script src="assets/js/upscaler.min.js"></script>
+    <script src="assets/js/app.js"></script>
+
+  </head>
+  <body onload="setup()">
+    <h1>Upscale Example</h1>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <td>Model</td>
+          <td>Schaal</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <select id="model_selector"></select>
+          </td>
+          <td>
+            <select id="model_scale_selector"></select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br />
+
+    <p>Upload a file below to upscale it.</p>
+    <input type="file" id="file" />
+    <p id="info"></p>
+    <table style="display: none;" id="table">
+      <thead>
+        <tr>
+          <td>Original</td>
+          <td>Upscaled</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div id="original"></div></td>
+          <td><div id="target"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+body {
+  padding: 40px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+button {
+  margin-top: 20px;
+  display: block;
+  padding: 10px 40px;
+}
+table {
+  border-collapse: collapse;
+}
+table td {
+  vertical-align: top;
+  border: 1px solid #eee;
+  padding: 5px;
+}
+
+.table, .table td{
+  border: none;
+}
