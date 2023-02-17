@@ -1,0 +1,10 @@
+/__pycache__
+/include
+/Lib
+/share
+/scripts
+
+/tmp/*
+!/tmp/note.txt
+
+pyvenv.cfg

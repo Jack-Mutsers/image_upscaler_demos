@@ -3,13 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <title>Upload Example | Upscaler.JS</title>
-    <link rel="stylesheet" href="assets/css/layout.css">
     
     <script src="assets/js/tf.min.js"></script>
     <script src="assets/js/upscaler_index.js"></script>
     <script src="assets/js/upscaler.min.js"></script>
+    
+    <link rel="stylesheet" href="assets/css/layout.css">
     <script src="assets/js/app.js"></script>
 
+    <script src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css">
+    
   </head>
   <body onload="setup()">
     <h1>Upscale Example</h1>
@@ -37,8 +41,18 @@
 
     <p>Upload a file below to upscale it.</p>
     <input type="file" id="file" />
-    <p id="info"></p>
-    <table style="display: none;" id="table">
+    <div id="info"></div>
+
+    <div id="image-compare" style="display: none;">
+      <div id="original_0">
+        <img src="" id="img_original" alt="">
+      </div>
+      <div id="target_0">
+        <img src="" ïd="img_target" alt="">
+      </div>
+    </div>
+
+    <table style="display: none;" id="convertsion_table">
       <thead>
         <tr>
           <td>Original</td>

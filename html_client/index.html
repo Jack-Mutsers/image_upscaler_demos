@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>back-end upscaler</title>
+    
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/image-compare-viewer.min.css">
+    
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/image-compare-viewer.min.js"></script>
+    
+  </head>
+  <body onload="setup()">
+    <h1>Back-end upscale Example</h1>
+
+    <br />
+
+    <p>Upload a file below to upscale it.</p>
+    <input type="file" id="file" accept=".jpg, .jpeg, .png"/>
+    <div id="info"></div>
+
+    <div id="image-compare" style="display: none;">
+      <div id="original_0">
+        <img src="" id="img_original" alt="">
+      </div>
+      <div id="target_0">
+        <img src="" id="img_target" alt="">
+      </div>
+    </div>
+
+    <table style="display: none;" id="convertsion_table">
+      <thead>
+        <tr>
+          <td>Original</td>
+          <td>Upscaled</td>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </body>
+</html>
