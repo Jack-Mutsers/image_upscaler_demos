@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="assets/css/layout.css">
     <script src="assets/js/app.js"></script>
 
-    <script src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css">
-    
+    <link rel="stylesheet" href="assets/css/image-compare-viewer.min.css">
+    <script src="assets/js/image-compare-viewer.min.js"></script>    
+
   </head>
   <body onload="setup()">
     <h1>Upscale Example</h1>
@@ -40,7 +40,8 @@
     <br />
 
     <p>Upload a file below to upscale it.</p>
-    <input type="file" id="file" />
+    <input type="file" id="file" multiple accept=".jpg, .jpeg, .png"/>
+    <button onclick="resend_image()">Send again</button>
     <div id="info"></div>
 
     <div id="image-compare" style="display: none;">
@@ -48,7 +49,7 @@
         <img src="" id="img_original" alt="">
       </div>
       <div id="target_0">
-        <img src="" ïd="img_target" alt="">
+        <img src="" id="img_target" alt="">
       </div>
     </div>
 
@@ -60,10 +61,6 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><div id="original"></div></td>
-          <td><div id="target"></div></td>
-        </tr>
       </tbody>
     </table>
   </body>

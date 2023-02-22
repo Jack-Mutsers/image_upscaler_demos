@@ -38,6 +38,9 @@ var file;
 var info;
 var model_selector;
 var model_scale_selector;
+var conversion_table;
+var compare_container;
+var compare = false;
 
 var upscaler;
 
@@ -57,6 +60,8 @@ function setup(){
   target = document.getElementById("target");
   file = document.getElementById("file");
   info = document.getElementById("info");
+  conversion_table = document.getElementById("convertsion_table")
+  compare_container = document.getElementById("image-compare")
 
   model_selector = document.getElementById("model_selector");
   model_scale_selector = document.getElementById("model_scale_selector");
@@ -73,6 +78,41 @@ function setup(){
 
   file.addEventListener("change", handleFiles, false);
   model_selector.addEventListener("change", set_scale_selectbox, false);
+
+  const element = document.getElementById("image-compare");
+  const viewer = new ImageCompare(element).mount();
+}
+
+function resend_image(){
+  if(file.value == null || file.value == undefined || file.value == "" || file.value == false){
+      console.log("no image selected")
+      file.click();
+      return;
+  }
+
+  console.log("resend_image");
+
+  if ("createEvent" in document) {
+      var evt = document.createEvent("HTMLEvents");
+      evt.initEvent("change", false, true);
+      file.dispatchEvent(evt);
+  }
+  else
+      file.fireEvent("onchange");
+}
+
+function create_table_row(original_id, target_id){
+    const tr = document.createElement("tr");
+
+    const td_original = document.createElement("td");
+    td_original.setAttribute("id", original_id)
+    tr.append(td_original);
+    
+    const td_target = document.createElement("td");
+    td_target.setAttribute("id", target_id)
+    tr.append(td_target);
+
+    conversion_table.append(tr);
 }
 
 function set_scale_selectbox(){
@@ -94,44 +134,83 @@ function set_scale_selectbox(){
   }
 }
 
-const createImage = (targetDiv, src, upscaled = false) => {
-  const img = document.createElement("img");
-  img.src = src;
-  targetDiv.innerHTML = "";
+const createImage = (target_id, src) => {
+  targetDiv = document.getElementById(target_id);
+    
+    var img;
+    if(compare){  
+        img_id = target_id == "original_0" ? "img_original" : "img_target"
 
-  if(upscaled){
-    original_img = original.getElementsByTagName("img")[0]
-  }
+        img = document.getElementById(img_id);
+        img.src = src;
+    }else{
+        targetDiv.innerHTML = "";
 
-  targetDiv.appendChild(img);
-  return img;
+        img = document.createElement("img");
+        img.src = src;
+      
+        targetDiv.appendChild(img);
+    }
+    return img;
 };
+  
+function create_log_message(message){
+  const paragraph = document.createElement("p");
+  paragraph.innerHTML = message;
+  info.append(paragraph);
+}
 
 async function handleFiles() {
   if(this.value == null || this.value == undefined || this.value == false || this.value == ""){
     return;
   }
 
+  compare = this.files.length == 1;
+
+  info.innerHTML = "";
+
+  if(compare){
+      compare_container.style = "";
+  }else{
+      conversion_table.innerHTML = "";
+      conversion_table.style = "";
+  }
+
   await set_model();
 
-  info.innerText = "Upscaling...";
-  target.innerHTML = "";
-  table.style = "";
-  await tf.nextFrame();
-  const file = this.files[0];
-  const fr = new FileReader();
-  fr.onload = async () => {
-    const img = createImage(original, fr.result);
-    const start = new Date().getTime();
-    const upscaledImgSrc = await upscaler.upscale(img, {
-      patchSize: 64,
-      padding: 5,
-    });
-    createImage(target, upscaledImgSrc, true);
-    const ms = new Date().getTime() - start;
-    info.innerText = `Upscaled in ${ms} ms`;
+  for(i = 0; i < this.files.length; i++){
+    const file = this.files[i]
+    
+    if(file.type.includes("image") == false){
+        message = "invalid filetype detected for file: <b>\"" + file.name + "\"</b> of type: <b>\"" + file.type + "\"</b>";
+        create_log_message(message)
+        continue;
+    }
 
-    this.value = "";
-  };
-  fr.readAsDataURL(file);
+    const original_id = "original_" + i;
+    const target_id = "target_" + i;
+
+    if(compare == false){
+        create_table_row(original_id, target_id);
+    }
+
+    create_log_message("Upscaling...");
+
+    await tf.nextFrame();
+    const fr = new FileReader();
+    fr.onload = async () => {
+      const img = createImage(original_id, fr.result);
+      const start = new Date().getTime();
+      const upscaledImgSrc = await upscaler.upscale(img, {
+        patchSize: 64,
+        padding: 5,
+      });
+      createImage(target_id, upscaledImgSrc);
+      const ms = new Date().getTime() - start;
+      info.innerText = `Upscaled in ${ms} ms`;
+
+      this.value = "";
+    };
+    fr.readAsDataURL(file);
+  }
 }

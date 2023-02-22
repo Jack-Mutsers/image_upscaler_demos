@@ -1,13 +1,14 @@
-body {
+/* body {
   padding: 40px;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-button {
+  overflow-x: hidden;
+} */
+/* button {
   margin-top: 20px;
   display: block;
   padding: 10px 40px;
-}
-table {
+} */
+/* table {
   border-collapse: collapse;
 }
 table td {
@@ -18,4 +19,4 @@ table td {
 
 .table, .table td{
   border: none;
-}
+} */
