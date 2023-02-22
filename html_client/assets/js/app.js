@@ -23,6 +23,24 @@ function setup(){
     const viewer = new ImageCompare(element).mount();
 }
 
+function resend_image(){
+    if(file.value == null || file.value == undefined || file.value == "" || file.value == false){
+        console.log("no image selected")
+        file.click();
+        return;
+    }
+
+    console.log("resend_image");
+
+    if ("createEvent" in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        file.dispatchEvent(evt);
+    }
+    else
+        file.fireEvent("onchange");
+}
+
 function create_table_row(original_id, target_id){
     const tr = document.createElement("tr");
 
