@@ -1,6 +1,12 @@
 
 image_path = "assets/images/baboon-original.png";
 models = {
+  "EDSR": {
+    x4:{
+      path: "/assets/models/EDSR/edsr-16-x4-fine-tuned/model.json",
+      scale: 4
+    },
+  },
   "esrgan_slim": {
     x2: {
       path: "/assets/models/esrgan-slim/2x/model.json",
