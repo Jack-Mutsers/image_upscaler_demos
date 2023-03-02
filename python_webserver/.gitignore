@@ -1,7 +1,6 @@
 **/__pycache__
-/include
-/Lib
-/share
-/scripts
-
-pyvenv.cfg
+**/include
+**/Lib
+**/share
+**/scripts
+/virtual_environment/*

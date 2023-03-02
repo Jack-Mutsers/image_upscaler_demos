@@ -17,7 +17,8 @@ class Upscaler:
 
     def setup_upsampler(self):
         # model_name = "RealESRGAN_x4plus"
-        model_name = "RealESRNet_x4plus"
+        # model_name = "RealESRNet_x4plus"
+        model_name = "realesr-general-x4v3"
         # model_name = "RRDB_ESRGAN_x4"
         # model_name = "4x_RealisticRescaler_100000_G"
         
@@ -45,7 +46,25 @@ class Upscaler:
             model = SRVGGNetCompact(num_in_ch=3, num_out_ch=3, num_feat=64, num_conv=32, upscale=4, act_type='prelu')
             self.scale = 4
             file_url = ['https://drive.google.com/u/0/uc?id=1Uc9RUc2YpZKpPoGQeGxNUb3Ro-U720cH&export=download']
-
+        elif model_name == 'RealESRGAN_x4plus_anime_6B':  # x4 RRDBNet model with 6 blocks
+            model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=6, num_grow_ch=32, scale=4)
+            self.scale = 4
+            file_url = ['https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth']
+        elif model_name == 'RealESRGAN_x2plus':  # x2 RRDBNet model
+            model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=2)
+            self.scale = 2
+            file_url = ['https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth']
+        elif model_name == 'realesr-animevideov3':  # x4 VGG-style model (XS size)
+            model = SRVGGNetCompact(num_in_ch=3, num_out_ch=3, num_feat=64, num_conv=16, upscale=4, act_type='prelu')
+            self.scale = 4
+            file_url = ['https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesr-animevideov3.pth']
+        elif model_name == 'realesr-general-x4v3':  # x4 VGG-style model (S size)
+            model = SRVGGNetCompact(num_in_ch=3, num_out_ch=3, num_feat=64, num_conv=32, upscale=4, act_type='prelu')
+            self.scale = 4
+            file_url = [
+                'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesr-general-wdn-x4v3.pth',
+                'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesr-general-x4v3.pth'
+            ]
         # determine model paths
         model_path = "/models/" + model_name + '.pth'
         if not os.path.isfile(model_path):

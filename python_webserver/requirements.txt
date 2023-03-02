@@ -1,0 +1,10 @@
+torch
+torchvision
+flask
+flask_cors
+pillow
+numpy
+opencv-python
+basicsr
+realesrgan
+asgiref
