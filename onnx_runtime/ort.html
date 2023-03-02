@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image upscaling/super-resolution in the browser (with JS/ONNX)</title>
+    <!-- <script src="assets/js/github-pages-coop-coep-workaround.js"></script> -->
+  </head>
+  <body>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.14.0/dist/ort.js"></script> -->
+    <script src="assets/js/ort/ort.js"></script>
+    
+    <div>
+      Select one or more images: <input type="file" accept="image/*" multiple id="fileInputEl"> or <button onclick="loadImageByUrl(exampleImgEl.src); this.disabled=true; exampleImgEl.style.display=''; this.innerHTML='done.';">use example image</button>
+      <br>
+      <img style="display:none" id="exampleImgEl" src="data:image/jpeg;base64,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"/>
+      <br>
+      Then click here: <button id="startBtn" onclick="main()" disabled>loading model. please wait...</button>
+      <br>
+      Save all the resulting upscaled images: <button id="downloadBtn" disabled onclick="downloadOutputImages()">save</button>
+    </div>
+    <p><a href="https://github.com/josephrocca/super-resolution-js">github repo</a> - <a href="https://huggingface.co/rocca/swin-ir-onnx">huggingface repo</a></p>
+    
+    <script>
+        // model_path = "https://huggingface.co/rocca/swin-ir-onnx/resolve/main/003_realSR_BSRGAN_DFO_s64w8_SwinIR-M_x4_GAN.onnx";
+        model_path = "assets/models/ONNX/003_realSR_BSRGAN_DFO_s64w8_SwinIR-M_x4_GAN.onnx";
+
+        let exampleImageBlob;
+        async function loadImageByUrl(url) {
+            exampleImageBlob = await fetch(url).then(r => r.blob());
+        }
+        
+        if(self.crossOriginIsolated) { // needs to be cross-origin-isolated to use wasm threads. you need to serve this html file with these two headers: https://web.dev/coop-coep/
+            ort.env.wasm.numThreads = navigator.hardwareConcurrency / 2;
+        }
+        ort.env.wasm.proxy = true;
+        
+        if(!window.OffscreenCanvas) alert("Your browser doesn't support OffscreenCanvas - a browser feature that was standardized way back in 2018. Please use a modern browser like Chrome, Edge or Brave.");
+        
+        let onnxSession;
+        (async function() {
+            console.log("Downloading model... (see network tab for progress)");
+            let t = Date.now();
+            onnxSession = await ort.InferenceSession.create(model_path, { executionProviders: ["wasm"] });
+            console.log(`Model loaded in ${Date.now()-t} ms.`);
+            startBtn.disabled = false;
+            startBtn.textContent = "start";
+        })();
+        
+        async function main() {
+            if(!fileInputEl.files[0] && !exampleImageBlob) return alert("Please select some images first.");
+            
+            startBtn.disabled = true;
+            startBtn.innerHTML = "processing...";
+            
+            let files = fileInputEl.files[0] ? fileInputEl.files : [exampleImageBlob];
+            
+            let inputBlob;
+            for(let inputBlob of files) {
+            let {data, width, height} = await blobToLinearRGBArray(inputBlob);
+
+            const feeds = {'input': new ort.Tensor('float32', data, [1, 3, height, width])};
+
+            console.log("Running inference...");
+            let t = Date.now();
+            const results = await onnxSession.run(feeds);
+            console.log(`Finished in ${Date.now()-t}ms`);
+
+            const out = results["output"]; // greyscale data tensor
+            console.log(`results:`, out);
+            // out.data is of shape/form Channel-Red-Green-Blue
+            let blob = await CRGBArrayToBlob(out.data, {width:out.dims[3], height:out.dims[2]});
+            let blobUrl = URL.createObjectURL(blob);
+            let imgEl = document.createElement("img");
+            imgEl.dataset.name = inputBlob.name;
+            imgEl.src = blobUrl;
+            document.body.appendChild(imgEl);
+            }
+            
+            startBtn.disabled = false;
+            startBtn.innerHTML = "start";
+            downloadBtn.disabled = false;
+        }
+        
+        async function getBlobImageDims(blob) {
+            let img = await createImageBitmap(blob);
+            return {width:img.width, height:img.height};
+        }
+        
+        function CRGBArrayToBlob(linearArr, dims) { 
+            let dataArray = [];
+            let numPixels = dims.height * dims.width;
+            for(let y = 0; y < dims.height; y++) {
+            for(let x = 0; x < dims.width; x++) {
+                let i = y*dims.width + x;
+                dataArray[i*4+0] = Math.round(255*linearArr[i+0]);
+                dataArray[i*4+1] = Math.round(255*linearArr[i+numPixels]);
+                dataArray[i*4+2] = Math.round(255*linearArr[i+2*numPixels]);
+                dataArray[i*4+3] = 255;
+            }
+            }
+            let imageData = new ImageData(new Uint8ClampedArray(dataArray), dims.width, dims.height);
+            let canvas = new OffscreenCanvas(dims.width, dims.height);
+            let ctx = canvas.getContext("2d");
+            ctx.putImageData(imageData, 0, 0);
+            return canvas.convertToBlob({type:"image/png"});
+        }
+        
+        // this function resizes to 256px width
+        async function blobToLinearRGBArray(blob) {
+            let img = await createImageBitmap(blob);
+            let canvas = new OffscreenCanvas(img.width, img.height);
+            let ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            let rgbData = [[], [], []]; // [r, g, b]
+            // remove alpha and put into correct shape:
+            let d = imageData.data;
+            for(let i = 0; i < d.length; i += 4) { 
+            let x = (i/4) % canvas.width;
+            let y = Math.floor((i/4) / canvas.width)
+            if(!rgbData[0][y]) rgbData[0][y] = [];
+            if(!rgbData[1][y]) rgbData[1][y] = [];
+            if(!rgbData[2][y]) rgbData[2][y] = [];
+            rgbData[0][y][x] = d[i+0]/255;
+            rgbData[1][y][x] = d[i+1]/255;
+            rgbData[2][y][x] = d[i+2]/255;
+            }
+            rgbData = Float32Array.from(rgbData.flat().flat());
+            return {data:rgbData, width:img.width, height:img.height};
+        }
+        
+        async function downloadOutputImages() {
+            let directoryHandle = await window.showDirectoryPicker();
+            for(let img of [...document.querySelectorAll("img")]) {
+            let url = img.src;
+            let name = img.dataset.name;
+            let fileHandle = await directoryHandle.getFileHandle(name, {create:true});
+            let response = await fetch(url);
+            await response.body.pipeTo(await fileHandle.createWritable());
+            }
+        }
+    </script>
+  </body>
+</html>
