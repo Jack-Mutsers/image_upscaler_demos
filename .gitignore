@@ -17,3 +17,7 @@ python_wheel_creator/Scripts/
 python_wheel_creator/pyvenv.cfg
 
 **/tmp
+test/*
+**/virtual_environment**
+
+**/*model*/**
