@@ -1,11 +1,19 @@
 
 image_path = "assets/images/baboon-original.png";
 models = {
-  "EDSR": {
-    x4:{
-      path: "/assets/models/EDSR/edsr-16-x4-fine-tuned/model.json",
-      scale: 4
+  "div2k": {
+    x2: {
+      path: "/assets/models/div2k/2x/model.json",
+      scale: 2
     },
+    x3: {
+      path: "/assets/models/div2k/3x/model.json",
+      scale: 3
+    },
+    x4: {
+      path: "/assets/models/div2k/4x/model.json",
+      scale: 4
+    }
   },
   "esrgan_slim": {
     x2: {
@@ -34,7 +42,7 @@ models = {
       path: "/assets/models/esrgan-medium/4x/model.json",
       scale: 4
     }
-  }
+  },
 };
 
 var table;
@@ -143,18 +151,15 @@ function set_scale_selectbox(){
 const createImage = (target_id, src) => {
   targetDiv = document.getElementById(target_id);
     
-    var img;
+    var img = document.createElement("img");
+    img.src = src;
     if(compare){  
         img_id = target_id == "original_0" ? "img_original" : "img_target"
 
-        img = document.getElementById(img_id);
-        img.src = src;
+        target_img = document.getElementById(img_id);
+        target_img.src = src;
     }else{
         targetDiv.innerHTML = "";
-
-        img = document.createElement("img");
-        img.src = src;
-      
         targetDiv.appendChild(img);
     }
     return img;
