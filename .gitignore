@@ -21,3 +21,7 @@ test/*
 **/virtual_environment**
 
 **/*model*/**
+!model_tools/model_downloader
+!model_tools/model_downloader/*
+!model_tools/model_converter
+!model_tools/model_converter/*

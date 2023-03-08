@@ -2,9 +2,9 @@ torch
 torchvision
 flask
 flask_cors
+asgiref
 pillow
 numpy
 opencv-python
 basicsr
 realesrgan
-asgiref
