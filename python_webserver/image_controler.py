@@ -1,7 +1,6 @@
 from flask import Flask, json, request
 from flask_cors import CORS
 from services import Image_manipulator
-# from services import Model_writer
 # from services import Image_tester
 
 allowed_origins = [
@@ -16,7 +15,6 @@ allowed_origins = [
     "*"
 ]
 
-# MW = Model_writer()
 IM = Image_manipulator()
 
 api = Flask(__name__)
