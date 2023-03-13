@@ -2,6 +2,7 @@
 image_upscaler/inputs/
 **/inputs/
 **/pyodide-complete/
+env
 
 *.rar
 *.zip
